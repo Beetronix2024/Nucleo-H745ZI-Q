@@ -1,0 +1,65 @@
+project:
+  packs:
+    - pack: Keil::STM32H7xx_DFP
+    - pack: ARM::CMSIS
+    - pack: ARM::CMSIS-NN
+    - pack: ARM::CMSIS-DSP
+  setups:
+    - setup: Options for Target_1
+      processor:
+        trustzone: non-secure
+      add-path:
+        - Source/Include
+        - Source/Include_LED
+      debug: "on"
+      misc:
+        - C:
+            - -std=c99
+          C-CPP:
+            - -fno-rtti
+            - -funsigned-char
+            - -fshort-enums
+            - -fshort-wchar
+            - -ffunction-sections
+            - -Wno-packed
+            - -Wno-missing-variable-declarations
+            - -Wno-missing-prototypes
+            - -Wno-missing-noreturn
+            - -Wno-sign-conversion
+            - -Wno-nonportable-include-path
+            - -Wno-reserved-id-macro
+            - -Wno-unused-macros
+            - -Wno-documentation-unknown-command
+            - -Wno-documentation
+            - -Wno-license-management
+            - -Wno-parentheses-equality
+          CPP:
+            - -xc++
+            - -std=c++11
+          ASM:
+            - -masm=auto
+          Link:
+            - --map
+            - --load_addr_map_info
+            - --xref
+            - --callgraph
+            - --symbols
+            - --info sizes
+            - --info totals
+            - --info unused
+            - --info veneers
+            - --strict
+            - --summary_stderr
+            - --info summarysizes
+  linker:
+    - script: LEDbuiltin_Target_1.sct
+  groups:
+    - group: main
+      files:
+        - file: Source/main.c
+    - group: include
+      files:
+        - file: Source/Include_LED/LED.c
+  components:
+    - component: ARM::CMSIS:CORE
+    - component: Keil::Device:Startup
